@@ -27,9 +27,7 @@ jobs:
         run: |
           just test
           coverage=$(go tool cover -func=cover.out | grep total | awk '{print substr($3, 1, length($3)-1)}')
-          echo "HERE"
           echo "coverage=$coverage" >> "$GITHUB_OUTPUT"
-          echo "THERE"
           old_coverage=$(grep -o "coverage-.*%25" README.md | sed -nE "s/coverage-(.*)%25/\1/p")
           echo "diff=$(echo "scale=1;$coverage-$old_coverage" | bc)" >> "$GITHUB_OUTPUT"
       - name: Report coverage
@@ -42,17 +40,17 @@ jobs:
       - name: Gerenate coverage badge
         run: |
           coverage=${{ steps.test.outputs.coverage }}
-          if (( $(echo "$coverage = 0" | bc -l) )); then
+          if (( $(echo "$coverage==0" | bc -l) )); then
             color=9F9F9F
-          elif (( $(echo "$coverage < 40" | bc -l) )); then
+          elif (( $(echo "$coverage<40" | bc -l) )); then
             color=E05D44
-          elif (( $(echo "$coverage < 60" | bc -l) )); then
+          elif (( $(echo "$coverage<60" | bc -l) )); then
             color=FE7D37
-          elif (( $(echo "$coverage < 75" | bc -l) )); then
+          elif (( $(echo "$coverage<75" | bc -l) )); then
             color=DFB317
-          elif (( $(echo "$coverage < 90" | bc -l) )); then
+          elif (( $(echo "$coverage<90" | bc -l) )); then
             color=A4A61D
-          elif (( $(echo "$coverage < 95" | bc -l) )); then
+          elif (( $(echo "$coverage<95" | bc -l) )); then
             color=97CA00
           else
             color=44CC11
