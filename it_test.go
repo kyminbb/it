@@ -64,6 +64,15 @@ func TestNth(t *testing.T) {
 	}
 }
 
+func ExampleNth() {
+	seq := it.All([]int{1, 2, 3})
+	fmt.Println(it.Nth(seq, 1))
+	fmt.Println(it.Nth(seq, 3))
+	// Output:
+	// 2 true
+	// 0 false
+}
+
 // assertEqualSeq asserts that two sequences are equal.
 func assertEqualSeq[V any](t *testing.T, expected, actual iter.Seq[V]) {
 	t.Helper()
