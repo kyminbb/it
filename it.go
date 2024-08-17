@@ -12,3 +12,12 @@ func All[V any](s []V) iter.Seq[V] {
 		}
 	}
 }
+
+// Count consumes seq and returns the number of elements.
+func Count[V any](seq iter.Seq[V]) int {
+	count := 0
+	for range seq {
+		count++
+	}
+	return count
+}
