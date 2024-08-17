@@ -9,8 +9,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
-      - uses: pre-commit-ci/lite-action@v1.0.2
-        if: always()
+      - uses: pre-commit/action@v3.0.1
   test:
     runs-on: ubuntu-latest
     permissions:
