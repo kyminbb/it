@@ -7,9 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pre-commit/action@v3.0.1
         with:
-          extra_args: run --all-files
+          ref: ${{ github.head_ref }}
+      - uses: pre-commit-ci/lite-action@v1.0.2
   test:
     runs-on: ubuntu-latest
     permissions:
@@ -17,6 +17,8 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
