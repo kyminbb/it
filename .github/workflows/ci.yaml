@@ -3,13 +3,19 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  pre-commit:
+  lint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
-          ref: ${{ github.head_ref }}
-      - uses: pre-commit/action@v3.0.1
+          go-version-file: go.mod
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.60
   test:
     runs-on: ubuntu-latest
     permissions:
