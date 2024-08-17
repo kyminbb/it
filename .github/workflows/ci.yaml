@@ -27,6 +27,7 @@ jobs:
         run: |
           just test
           coverage=$(go tool cover -func=cover.out | grep total | awk '{print substr($3, 1, length($3)-1)}')
+          echo "$coverage"
           echo "coverage=$coverage" >> "$GITHUB_OUTPUT"
           old_coverage=$(grep -o "coverage-.*%25" README.md | sed -nE "s/coverage-(.*)%25/\1/p")
           echo "diff=$(echo "scale=1;$coverage-$old_coverage" | bc)" >> "$GITHUB_OUTPUT"
