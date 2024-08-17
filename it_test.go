@@ -45,6 +45,13 @@ func TestCount(t *testing.T) {
 	}
 }
 
+func ExampleCount() {
+	seq := it.All([]int{1, 2, 3})
+	fmt.Println(it.Count(seq))
+	// Output:
+	// 3
+}
+
 // assertEqualSeq asserts that two sequences are equal.
 func assertEqualSeq[V any](t *testing.T, expected, actual iter.Seq[V]) {
 	t.Helper()
