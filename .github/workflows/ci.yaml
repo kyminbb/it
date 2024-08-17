@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: pre-commit/action@v3.0.1
         with:
-          args: run --all-files
+          extra_args: run --all-files
   test:
     runs-on: ubuntu-latest
     permissions:
