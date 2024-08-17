@@ -20,6 +20,7 @@ func TestMap(t *testing.T) {
 			f:    func(x int) int { return x * 2 },
 			want: it.All([]int{2, 4, 6}),
 		},
+		{name: "Empty", seq: it.All([]int{}), f: func(x int) int { return x }, want: it.All([]int{})},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
