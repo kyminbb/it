@@ -1,0 +1,64 @@
+name: ci
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: pre-commit/action@v3.0.1
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - uses: extractions/setup-just@v2
+      - name: Run tests
+        id: run-tests
+        run: |
+          just test
+          coverage=$(go tool cover -func=cover.out | grep total | awk '{print substr($3, 1, length($3)-1)}')
+          echo "coverage=$coverage" >> "$GITHUB_OUTPUT"
+          old_coverage=$(grep -o "coverage-.*%25" README.md | sed -nE "s/coverage-(.*)%25/\1/p")
+          echo "diff=$(echo "scale=1;$coverage-$old_coverage" | bc)" >> "$GITHUB_OUTPUT"
+      - name: Report coverage
+        uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            Coverage: `${{ steps.run-tests.outputs.coverage }}%`
+            Difference: `${{ steps.run-tests.outputs.diff }}%`
+          refresh-message-position: true
+      - name: Gerenate coverage badge
+        run: |
+          coverage=${{ steps.run-tests.outputs.coverage }}
+          if (( $(echo "$coverage==0" | bc -l) )); then
+            color=9F9F9F
+          elif (( $(echo "$coverage<40" | bc -l) )); then
+            color=E05D44
+          elif (( $(echo "$coverage<60" | bc -l) )); then
+            color=FE7D37
+          elif (( $(echo "$coverage<75" | bc -l) )); then
+            color=DFB317
+          elif (( $(echo "$coverage<90" | bc -l) )); then
+            color=A4A61D
+          elif (( $(echo "$coverage<95" | bc -l) )); then
+            color=97CA00
+          else
+            color=44CC11
+          fi
+          sed -i -E "s/(https:\/\/img.shields.io\/badge\/coverage-).*(%25-).*/\1$coverage\2$color)/" README.md
+      - name: Commit and push changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          message: Update coverage badge
