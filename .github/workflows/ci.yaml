@@ -3,7 +3,14 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  run-tests:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pre-commit/action@v3.0.1
+        with:
+          args: run --all-files
+  test:
     runs-on: ubuntu-latest
     permissions:
       contents: write
