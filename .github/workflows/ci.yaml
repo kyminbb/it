@@ -23,15 +23,15 @@ jobs:
         with:
           go-version-file: go.mod
       - uses: extractions/setup-just@v2
-      - run: |
+      - name: Run tests
+        run: |
           just test
           coverage=$(go tool cover -func=cover.out | grep total | awk '{print substr($3, 1, length($3)-1)}')
-          go tool cover -func=cover.out
-          go tool cover -func=cover.out | grep total
-          go tool cover -func=cover.out | grep total | awk '{print substr($3, 1, length($3)-1)}'
+          echo "HERE"
           echo "coverage=$coverage" >> "$GITHUB_OUTPUT"
+          echo "THERE"
           old_coverage=$(grep -o "coverage-.*%25" README.md | sed -nE "s/coverage-(.*)%25/\1/p")
-          echo "diff=$(echo "$coverage-$old_coverage" | bc)" >> "$GITHUB_OUTPUT"
+          echo "diff=$(echo "scale=1;$coverage-$old_coverage" | bc)" >> "$GITHUB_OUTPUT"
       - name: Report coverage
         uses: mshick/add-pr-comment@v2
         with:
