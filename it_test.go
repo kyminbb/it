@@ -20,6 +20,31 @@ func ExampleAll() {
 	// 3
 }
 
+func TestCount(t *testing.T) {
+	testCases := []struct {
+		name string
+		seq  iter.Seq[int]
+		want int
+	}{
+		{
+			name: "Empty",
+			seq:  it.All([]int{}),
+			want: 0,
+		},
+		{
+			name: "NonEmpty",
+			seq:  it.All([]int{1, 2, 3}),
+			want: 3,
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := it.Count(tc.seq)
+			assert.Equal(t, tc.want, got)
+		})
+	}
+}
+
 // assertEqualSeq asserts that two sequences are equal.
 func assertEqualSeq[V any](t *testing.T, expected, actual iter.Seq[V]) {
 	t.Helper()
