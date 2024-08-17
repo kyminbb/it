@@ -4,6 +4,8 @@ import (
 	"iter"
 	"testing"
 
+	"fmt"
+
 	"github.com/kyminbb/it"
 )
 
@@ -28,4 +30,16 @@ func TestMap(t *testing.T) {
 			assertEqualSeq(t, tc.want, got)
 		})
 	}
+}
+
+func ExampleMap() {
+	nums := it.All([]int{1, 2, 3})
+	doubles := it.Map(nums, func(x int) int { return x * 2 })
+	for v := range doubles {
+		fmt.Println(v)
+	}
+	// Output:
+	// 2
+	// 4
+	// 6
 }
