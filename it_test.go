@@ -26,16 +26,8 @@ func TestCount(t *testing.T) {
 		seq  iter.Seq[int]
 		want int
 	}{
-		{
-			name: "Empty",
-			seq:  it.All([]int{}),
-			want: 0,
-		},
-		{
-			name: "NonEmpty",
-			seq:  it.All([]int{1, 2, 3}),
-			want: 3,
-		},
+		{name: "Empty", seq: it.All([]int{}), want: 0},
+		{name: "NonEmpty", seq: it.All([]int{1, 2, 3}), want: 3},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -50,6 +42,26 @@ func ExampleCount() {
 	fmt.Println(it.Count(seq))
 	// Output:
 	// 3
+}
+
+func TestNth(t *testing.T) {
+	seq := it.All([]int{1, 2, 3})
+	testCases := []struct {
+		name string
+		n    int
+		want int
+		ok   bool
+	}{
+		{name: "Found", n: 1, want: 2, ok: true},
+		{name: "NotFound", n: 3},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			got, ok := it.Nth(seq, tc.n)
+			assert.Equal(t, tc.want, got)
+			assert.Equal(t, tc.ok, ok)
+		})
+	}
 }
 
 // assertEqualSeq asserts that two sequences are equal.
