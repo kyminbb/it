@@ -103,6 +103,36 @@ func ExampleLast() {
 	// 0 false
 }
 
+func TestTake(t *testing.T) {
+	testCases := []struct {
+		name string
+		seq  iter.Seq[int]
+		n    int
+		want iter.Seq[int]
+	}{
+		{name: "NonEmpty", seq: it.All([]int{1, 2, 3}), n: 2, want: it.All([]int{1, 2})},
+		{name: "EarlyEnd", seq: it.All([]int{1, 2, 3}), n: 4, want: it.All([]int{1, 2, 3})},
+		{name: "Empty", seq: it.All([]int{}), n: 2, want: it.All([]int{})},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := it.Take(tc.seq, tc.n)
+			assertEqualSeq(t, tc.want, got)
+		})
+	}
+}
+
+func ExampleTake() {
+	nums := it.All([]int{1, 2, 3})
+	take := it.Take(nums, 2)
+	for v := range take {
+		fmt.Println(v)
+	}
+	// Output:
+	// 1
+	// 2
+}
+
 func TestCycle(t *testing.T) {
 	testCases := []struct {
 		name string
