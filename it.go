@@ -44,7 +44,9 @@ func Last[V any](seq iter.Seq[V]) (V, bool) {
 	var v V
 	ok := false
 	for v = range seq {
-		ok = true
+		if !ok {
+			ok = true
+		}
 	}
 	return v, ok
 }
