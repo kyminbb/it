@@ -103,6 +103,23 @@ func ExampleLast() {
 	// 0 false
 }
 
+func TestEmpty(t *testing.T) {
+	got := it.Empty[int]()
+	ok := false
+	for range got {
+		ok = true
+	}
+	assert.False(t, ok)
+}
+
+func ExampleEmpty() {
+	empty := it.Empty[int]()
+	for range empty {
+		fmt.Println("This should not be printed")
+	}
+	// Output:
+}
+
 func TestTake(t *testing.T) {
 	testCases := []struct {
 		name string
