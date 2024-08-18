@@ -127,7 +127,7 @@ func Repeat[V any](v V) iter.Seq[V] {
 	}
 }
 
-// Chain returns an iterator that yields elements from each of the input iterators in turn.
+// Chain returns an iterator that yields elements from each of seqs in turn.
 func Chain[V any](seqs ...iter.Seq[V]) iter.Seq[V] {
 	return func(yield func(V) bool) {
 		// Reports whether the iterator should continue
