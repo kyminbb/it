@@ -22,7 +22,7 @@ func Count[V any](seq iter.Seq[V]) int {
 	return count
 }
 
-// Nth returns the n-th element of seq. The second return value reports whether the element exists.
+// Nth returns the nth element of seq. The second return value reports whether the element exists.
 //
 // The count is zero-based, so Nth(seq, 0) returns the first element.
 func Nth[V any](seq iter.Seq[V], n int) (V, bool) {
