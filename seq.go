@@ -128,6 +128,8 @@ func Repeat[V any](v V) iter.Seq[V] {
 }
 
 // Chain returns an iterator that yields elements from each of seqs in turn.
+//
+// If seqs is empty, the returned iterator is also empty.
 func Chain[V any](seqs ...iter.Seq[V]) iter.Seq[V] {
 	return func(yield func(V) bool) {
 		// Reports whether the iterator should continue
