@@ -54,26 +54,28 @@ func Last[V any](seq iter.Seq[V]) (V, bool) {
 // If seq is empty, the returned iterator is also empty.
 func Cycle[V any](seq iter.Seq[V]) iter.Seq[V] {
 	return func(yield func(V) bool) {
-		for {
+		// Reports whether the iterator should continue
+		iterateOnce := func() bool {
 			next, stop := iter.Pull(seq)
 			defer stop()
 			isFirst := true
-		once:
 			for {
 				v, ok := next()
 				switch {
 				case !ok:
 					if isFirst {
 						// seq is empty
-						return
+						return false
 					}
 					// Repeat seq
-					break once
+					return true
 				case !yield(v):
-					return
+					return false
 				}
 				isFirst = false
 			}
+		}
+		for iterateOnce() {
 		}
 	}
 }
