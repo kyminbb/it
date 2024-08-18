@@ -63,6 +63,25 @@ func Take[V any](seq iter.Seq[V], n int) iter.Seq[V] {
 	}
 }
 
+// Skip returns an iterator that skips the first n elements of seq and yields the rest.
+func Skip[V any](seq iter.Seq[V], n int) iter.Seq[V] {
+	return func(yield func(V) bool) {
+		next, stop := iter.Pull(seq)
+		defer stop()
+		for i := 0; i < n; i++ {
+			if _, ok := next(); !ok {
+				return
+			}
+		}
+		for {
+			v, ok := next()
+			if !ok || !yield(v) {
+				return
+			}
+		}
+	}
+}
+
 // Cycle returns an iterator that repeats seq endlessly.
 //
 // If seq is empty, the returned iterator is also empty.
