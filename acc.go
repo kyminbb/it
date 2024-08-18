@@ -36,7 +36,7 @@ func Min[V cmp.Ordered](seq iter.Seq[V]) (V, bool) {
 // init is the initial value of the accumulator.
 // f takes the accumulator and an element of seq as arguments.
 // The result of each call to f becomes the accumulator for the next call.
-func Fold[V, B any](seq iter.Seq[V], init B, f func(B, V) B) B {
+func Fold[V, R any](seq iter.Seq[V], init R, f func(R, V) R) R {
 	acc := init
 	for v := range seq {
 		acc = f(acc, v)

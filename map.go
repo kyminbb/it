@@ -3,8 +3,8 @@ package it
 import "iter"
 
 // Map returns an iterator that calls f on each element of seq.
-func Map[V, F any](seq iter.Seq[V], f func(V) F) iter.Seq[F] {
-	return func(yield func(F) bool) {
+func Map[V, R any](seq iter.Seq[V], f func(V) R) iter.Seq[R] {
+	return func(yield func(R) bool) {
 		next, stop := iter.Pull(seq)
 		defer stop()
 		for {
