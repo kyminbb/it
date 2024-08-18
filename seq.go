@@ -72,6 +72,7 @@ func Cycle[V any](seq iter.Seq[V]) iter.Seq[V] {
 				case !yield(v):
 					return false
 				}
+				isFirst = false
 			}
 		}
 		for iterateOnce() {
