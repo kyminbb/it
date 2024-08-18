@@ -49,6 +49,20 @@ func Last[V any](seq iter.Seq[V]) (V, bool) {
 	return v, ok
 }
 
+// Take returns an iterator that yields the first n elements of seq, or fewer if seq ends sooner.
+func Take[V any](seq iter.Seq[V], n int) iter.Seq[V] {
+	return func(yield func(V) bool) {
+		next, stop := iter.Pull(seq)
+		defer stop()
+		for i := 0; i < n; i++ {
+			v, ok := next()
+			if !ok || !yield(v) {
+				return
+			}
+		}
+	}
+}
+
 // Cycle returns an iterator that repeats seq endlessly.
 //
 // If seq is empty, the returned iterator is also empty.
