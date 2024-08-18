@@ -29,10 +29,11 @@ func TestMax(t *testing.T) {
 }
 
 func ExampleMax() {
-	seq := it.All([]int{1, 2, 3})
-	fmt.Println(it.Max(seq))
-	seq = it.All([]int{})
-	fmt.Println(it.Max(seq))
+	nums := it.All([]int{1, 2, 3})
+	fmt.Println(it.Max(nums))
+
+	nums = it.All([]int{})
+	fmt.Println(it.Max(nums))
 	// Output:
 	// 3 true
 	// 0 false
@@ -58,10 +59,11 @@ func TestMin(t *testing.T) {
 }
 
 func ExampleMin() {
-	seq := it.All([]int{3, 2, 1})
-	fmt.Println(it.Min(seq))
-	seq = it.All([]int{})
-	fmt.Println(it.Min(seq))
+	nums := it.All([]int{3, 2, 1})
+	fmt.Println(it.Min(nums))
+
+	nums = it.All([]int{})
+	fmt.Println(it.Min(nums))
 	// Output:
 	// 1 true
 	// 0 false

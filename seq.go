@@ -44,9 +44,36 @@ func Last[V any](seq iter.Seq[V]) (V, bool) {
 	var v V
 	ok := false
 	for v = range seq {
-		if !ok {
-			ok = true
-		}
+		ok = true
 	}
 	return v, ok
+}
+
+// Cycle returns an iterator that repeats seq endlessly.
+//
+// If seq is empty, the returned iterator is also empty.
+func Cycle[V any](seq iter.Seq[V]) iter.Seq[V] {
+	return func(yield func(V) bool) {
+		for {
+			next, stop := iter.Pull(seq)
+			defer stop()
+			isFirst := true
+		once:
+			for {
+				v, ok := next()
+				switch {
+				case !ok:
+					if isFirst {
+						// seq is empty
+						return
+					}
+					// Repeat seq
+					break once
+				case !yield(v):
+					return
+				}
+				isFirst = false
+			}
+		}
+	}
 }
