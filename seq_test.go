@@ -249,3 +249,52 @@ func ExampleRepeat() {
 	// 3
 	// 3
 }
+
+func TestChain(t *testing.T) {
+	testCases := []struct {
+		name string
+		seqs []iter.Seq[int]
+		want iter.Seq[int]
+	}{
+		{
+			name: "Many",
+			seqs: []iter.Seq[int]{it.All([]int{1, 2}), it.All([]int{3, 4})},
+			want: it.All([]int{1, 2, 3, 4}),
+		},
+		{name: "One", seqs: []iter.Seq[int]{it.All([]int{1, 2})}, want: it.All([]int{1, 2})},
+		{name: "Empty", seqs: []iter.Seq[int]{}, want: it.Empty[int]()},
+		{name: "Nil", want: it.Empty[int]()},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := it.Chain(tc.seqs...)
+			assertEqualSeq(t, tc.want, got)
+		})
+	}
+}
+
+func TestChain_Break(t *testing.T) {
+	seqs := []iter.Seq[int]{it.All([]int{0, 1}), it.All([]int{2, 3})}
+	chain := it.Chain(seqs...)
+	i := 0
+	for v := range chain {
+		if i == 2 {
+			break
+		}
+		assert.Equal(t, i, v)
+		i++
+	}
+}
+
+func ExampleChain() {
+	seqs := []iter.Seq[int]{it.All([]int{1, 2}), it.All([]int{3, 4})}
+	chain := it.Chain(seqs...)
+	for v := range chain {
+		fmt.Println(v)
+	}
+	// Output:
+	// 1
+	// 2
+	// 3
+	// 4
+}
