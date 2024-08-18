@@ -116,7 +116,6 @@ func TestCycle(t *testing.T) {
 			got := it.Cycle(it.All(tc.s))
 			i, count := 0, len(tc.s)
 			for v := range got {
-				fmt.Println(i, v)
 				if i == count*3 {
 					break
 				}
@@ -125,4 +124,24 @@ func TestCycle(t *testing.T) {
 			}
 		})
 	}
+}
+
+func ExampleCycle() {
+	nums := it.All([]int{1, 2, 3})
+	cycle := it.Cycle(nums)
+	i := 0
+	for v := range cycle {
+		if i == 6 {
+			break
+		}
+		fmt.Println(v)
+		i++
+	}
+	// Output:
+	// 1
+	// 2
+	// 3
+	// 1
+	// 2
+	// 3
 }
