@@ -145,3 +145,15 @@ func ExampleCycle() {
 	// 2
 	// 3
 }
+
+func TestRepeat(t *testing.T) {
+	got := it.Repeat(3)
+	i := 0
+	for v := range got {
+		if i == 3 {
+			break
+		}
+		assert.Equal(t, 3, v)
+		i++
+	}
+}
