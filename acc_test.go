@@ -103,3 +103,16 @@ func TestFold(t *testing.T) {
 		})
 	}
 }
+
+func ExampleFold() {
+	nums := it.All([]int{1, 2, 3})
+	sum := it.Fold(nums, 0, func(acc, v int) int { return acc + v })
+	fmt.Println(sum)
+
+	nums = it.All([]int{3, 4, 5})
+	product := it.Fold(nums, 1, func(acc, v int) int { return acc * v })
+	fmt.Println(product)
+	// Output:
+	// 6
+	// 60
+}

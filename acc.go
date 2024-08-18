@@ -34,6 +34,7 @@ func Min[V cmp.Ordered](seq iter.Seq[V]) (V, bool) {
 // Fold applies f to each element of seq and returns the accumulated result.
 //
 // init is the initial value of the accumulator.
+// f takes the accumulator and an element of seq as arguments.
 // The result of each call to f becomes the accumulator for the next call.
 func Fold[V, B any](seq iter.Seq[V], init B, f func(B, V) B) B {
 	acc := init
