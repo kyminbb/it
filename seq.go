@@ -49,7 +49,7 @@ func Last[V any](seq iter.Seq[V]) (V, bool) {
 	return v, ok
 }
 
-// Cycle returns an iterator that repeates seq endlessly.
+// Cycle returns an iterator that repeats seq endlessly.
 //
 // If seq is empty, the returned iterator is also empty.
 func Cycle[V any](seq iter.Seq[V]) iter.Seq[V] {
