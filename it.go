@@ -36,3 +36,11 @@ func Nth[V any](seq iter.Seq[V], n int) (V, bool) {
 	var zero V
 	return zero, false
 }
+
+// Last iterates over seq and returns the last element.
+func Last[V any](seq iter.Seq[V]) V {
+	var v V
+	for v = range seq {
+	}
+	return v
+}
