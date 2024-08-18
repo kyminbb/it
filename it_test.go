@@ -26,8 +26,8 @@ func TestCount(t *testing.T) {
 		seq  iter.Seq[int]
 		want int
 	}{
-		{name: "Empty", seq: it.All([]int{}), want: 0},
 		{name: "NonEmpty", seq: it.All([]int{1, 2, 3}), want: 3},
+		{name: "Empty", seq: it.All([]int{})},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -80,8 +80,8 @@ func TestLast(t *testing.T) {
 		want int
 		ok   bool
 	}{
-		{name: "Empty", seq: it.All([]int{})},
 		{name: "NonEmpty", seq: it.All([]int{1, 2, 3}), want: 3, ok: true},
+		{name: "Empty", seq: it.All([]int{})},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
