@@ -49,6 +49,12 @@ func Last[V any](seq iter.Seq[V]) (V, bool) {
 	return v, ok
 }
 
+// Empty returns an iterator that yields nothing.
+func Empty[V any]() iter.Seq[V] {
+	return func(yield func(V) bool) {
+	}
+}
+
 // Take returns an iterator that yields the first n elements of seq, or fewer if seq ends sooner.
 func Take[V any](seq iter.Seq[V], n int) iter.Seq[V] {
 	return func(yield func(V) bool) {
