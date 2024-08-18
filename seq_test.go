@@ -157,3 +157,19 @@ func TestRepeat(t *testing.T) {
 		i++
 	}
 }
+
+func ExampleRepeat() {
+	repeat := it.Repeat(3)
+	i := 0
+	for v := range repeat {
+		if i == 3 {
+			break
+		}
+		fmt.Println(v)
+		i++
+	}
+	// Output:
+	// 3
+	// 3
+	// 3
+}
