@@ -10,8 +10,8 @@ import (
 )
 
 func ExampleAll() {
-	seq := it.All([]int{1, 2, 3})
-	for v := range seq {
+	nums := it.All([]int{1, 2, 3})
+	for v := range nums {
 		fmt.Println(v)
 	}
 	// Output:
@@ -38,8 +38,8 @@ func TestCount(t *testing.T) {
 }
 
 func ExampleCount() {
-	seq := it.All([]int{1, 2, 3})
-	fmt.Println(it.Count(seq))
+	nums := it.All([]int{1, 2, 3})
+	fmt.Println(it.Count(nums))
 	// Output:
 	// 3
 }
@@ -65,9 +65,9 @@ func TestNth(t *testing.T) {
 }
 
 func ExampleNth() {
-	seq := it.All([]int{1, 2, 3})
-	fmt.Println(it.Nth(seq, 1))
-	fmt.Println(it.Nth(seq, 3))
+	nums := it.All([]int{1, 2, 3})
+	fmt.Println(it.Nth(nums, 1))
+	fmt.Println(it.Nth(nums, 3))
 	// Output:
 	// 2 true
 	// 0 false
@@ -93,11 +93,36 @@ func TestLast(t *testing.T) {
 }
 
 func ExampleLast() {
-	seq := it.All([]int{1, 2, 3})
-	fmt.Println(it.Last(seq))
-	seq = it.All([]int{})
-	fmt.Println(it.Last(seq))
+	nums := it.All([]int{1, 2, 3})
+	fmt.Println(it.Last(nums))
+
+	nums = it.All([]int{})
+	fmt.Println(it.Last(nums))
 	// Output:
 	// 3 true
 	// 0 false
+}
+
+func TestCycle(t *testing.T) {
+	testCases := []struct {
+		name string
+		s    []int
+	}{
+		{name: "NonEmpty", s: []int{1, 2, 3}},
+		{name: "Empty", s: []int{}},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := it.Cycle(it.All(tc.s))
+			i, count := 0, len(tc.s)
+			for v := range got {
+				fmt.Println(i, v)
+				if i == count*3 {
+					break
+				}
+				assert.Equal(t, tc.s[i%count], v)
+				i++
+			}
+		})
+	}
 }
