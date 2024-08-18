@@ -92,6 +92,16 @@ func TestLast(t *testing.T) {
 	}
 }
 
+func ExampleLast() {
+	seq := it.All([]int{1, 2, 3})
+	fmt.Println(it.Last(seq))
+	seq = it.All([]int{})
+	fmt.Println(it.Last(seq))
+	// Output:
+	// 3 true
+	// 0 false
+}
+
 // assertEqualSeq asserts that two sequences are equal.
 func assertEqualSeq[V any](t *testing.T, expected, actual iter.Seq[V]) {
 	t.Helper()
