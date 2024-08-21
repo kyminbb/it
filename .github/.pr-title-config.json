@@ -5,16 +5,11 @@
     "color": ""
   },
   "CHECKS": {
-    "prefixes": [
-      "break: ",
-      "feat: ",
-      "fix: ",
-      "none: "
-    ]
+    "regexp": "^(break: |feat: |fix: |none: )[\\p{Ll}\\p{Z}\\p{S}\\p{N}\\p{P}]{1,50}$"
   },
   "MESSAGES": {
     "success": "Passed",
-    "failure": "Failing CI test",
+    "failure": "PR title must match: \"^(break: |feat: |fix: |none: )[\\p{Ll}\\p{Z}\\p{S}\\p{N}\\p{P}]{1,50}$\"",
     "notice": ""
   }
 }
