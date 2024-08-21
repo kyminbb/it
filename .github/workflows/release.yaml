@@ -114,5 +114,5 @@ jobs:
         with:
           body: ${{ steps.build_changelog.outputs.changelog }}
           draft: ${{ inputs.dry_run }}
-          tag_name: ${{ steps.bump_version.outputs.new_tag }}
+          tag_name: ${{ needs.get_next_version.outputs.version }}
           make_latest: ${{ !inputs.dry_run }}
