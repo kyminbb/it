@@ -1,0 +1,20 @@
+{
+  "_comment": "This is a configuration file for PR title validation: https://github.com/thehanimo/pr-title-checker",
+  "LABEL": {
+    "name": "",
+    "color": ""
+  },
+  "CHECKS": {
+    "prefixes": [
+      "break: ",
+      "feat: ",
+      "fix: ",
+      "none: "
+    ]
+  },
+  "MESSAGES": {
+    "success": "Passed",
+    "failure": "Failing CI test",
+    "notice": ""
+  }
+}
