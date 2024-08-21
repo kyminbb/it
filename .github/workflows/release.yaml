@@ -45,6 +45,7 @@ jobs:
           version=${{ needs.get_next_version.outputs.version }}
           sed -i -E "s/(https:\/\/img.shields.io\/badge\/latest-).*(%25-)/\1$version\2)/" README.md
       - name: Commit and push changes
+        if: ${{ !inputs.dry_run }}
         uses: EndBug/add-and-commit@v9
         with:
           default_author: github_actions
