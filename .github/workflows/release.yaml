@@ -1,21 +1,24 @@
 name: release
 on:
   workflow_dispatch:
-  pull_request:
-    branches: [main]
-permissions:
-  contents: write
+    inputs:
+      dry_run:
+        description: Whether to run the workflow in dry-run mode
+        default: false
+        required: true
+        type: boolean
 jobs:
   get_next_version:
     if: ${{ github.triggering_actor == 'kyminbb' }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       do_release: ${{ steps.get_version.outputs.old_tag != '' }}
       version: ${{ steps.get_version.outputs.new_tag }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
           fetch-depth: 0
       - name: Determine next version
         id: get_version
@@ -24,18 +27,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
           DRY_RUN: true
-          MAJOR_STRING_TOKEN: "break:"
-          MINOR_STRING_TOKEN: "feat:"
-          PATCH_STRING_TOKEN: "fix:"
-          NONE_STRING_TOKEN: "no-release:"
+          MAJOR_STRING_TOKEN: 'break:'
+          MINOR_STRING_TOKEN: 'feat:'
+          PATCH_STRING_TOKEN: 'fix:'
+          NONE_STRING_TOKEN: 'none:'
   release:
     if: ${{ needs.get_next_version.outputs.do_release }}
     runs-on: ubuntu-latest
     needs: get_next_version
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
       - name: Update version badge
         run: |
           version=${{ needs.get_next_version.outputs.version }}
@@ -50,10 +53,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CUSTOM_TAG: ${{ needs.get_next_version.outputs.version }}
+          DRY_RUN: ${{ inputs.dry_run }}
       - name: Release next version
         uses: ncipollo/release-action@v1
         with:
-          draft: true
+          draft: ${{ inputs.dry_run }}
           generateReleaseNotes: true
           makeLatest: true
           tag: ${{ needs.get_next_version.outputs.version }}
