@@ -5,12 +5,7 @@
     "color": ""
   },
   "CHECKS": {
-    "prefixes": [
-      "break: ",
-      "feat: ",
-      "fix: ",
-      "none: "
-    ]
+    "regexp": "^(break: |feat: |fix: |none: )[a-z0-9_\\-`]{1,50}$"
   },
   "MESSAGES": {
     "success": "Passed",
