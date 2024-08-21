@@ -5,7 +5,7 @@
     "color": ""
   },
   "CHECKS": {
-    "regexp": "^(break: |feat: |fix: |none: )[a-z0-9_\\-`]{1,50}$"
+    "regexp": "^(break: |feat: |fix: |none: )[\p{Ll}\p{Z}\p{S}\p{N}\p{P}]{1,50}$"
   },
   "MESSAGES": {
     "success": "Passed",
