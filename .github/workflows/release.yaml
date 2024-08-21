@@ -1,0 +1,28 @@
+name: release
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Determine new version
+        id: get-version
+        uses: paulhatch/semantic-version@v5.4.0
+        with:
+          major_pattern: "break:"
+          minor_pattern: "feat:"
+      - name: Release version
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          version: ~> v2
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
