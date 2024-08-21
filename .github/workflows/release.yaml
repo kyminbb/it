@@ -27,9 +27,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
           DRY_RUN: true
-          MAJOR_STRING_TOKEN: "break:"
-          MINOR_STRING_TOKEN: "feat:"
-          PATCH_STRING_TOKEN: "fix:"
+          MAJOR_STRING_TOKEN: 'break:'
+          MINOR_STRING_TOKEN: 'feat:'
+          PATCH_STRING_TOKEN: 'fix:'
           NONE_STRING_TOKEN: "none:"
   release:
     if: ${{ needs.get_next_version.outputs.do_release }}
