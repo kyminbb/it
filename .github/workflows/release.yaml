@@ -1,6 +1,8 @@
 name: release
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
 permissions:
   contents: write
 jobs:
@@ -13,6 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref }}
           fetch-depth: 0
       - name: Determine next version
         id: get_version
@@ -30,6 +33,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: get_next_version
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
       - name: Update version badge
         run: |
           version=${{ needs.get_next_version.outputs.version }}
@@ -51,3 +57,4 @@ jobs:
           generateReleaseNotes: true
           makeLatest: true
           tag: ${{ needs.get_next_version.outputs.version }}
+  
