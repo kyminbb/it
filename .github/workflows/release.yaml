@@ -15,6 +15,7 @@ jobs:
       contents: read
     outputs:
       do_release: ${{ steps.get_version.outputs.old_tag != steps.get_version.outputs.new_tag }}
+      old_version: ${{ steps.get_version.outputs.old_tag }}
       version: ${{ steps.get_version.outputs.new_tag }}
     steps:
       - uses: actions/checkout@v4
@@ -50,18 +51,11 @@ jobs:
         with:
           default_author: github_actions
           message: 'none: release ${{ needs.get_next_version.outputs.version }}'
-      - name: Bump version
-        id: bump_version
-        uses: anothrNick/github-tag-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CUSTOM_TAG: ${{ needs.get_next_version.outputs.version }}
-          DRY_RUN: ${{ inputs.dry_run }}
       - name: Build changelog
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@v5
         with:
-          fromTag: ${{ steps.bump_version.outputs.old_tag }}
+          fromTag: ${{ needs.get_next_version.outputs.old_version }}
           toTag: ${{ github.ref }}
           failOnError: true
           mode: COMMIT
