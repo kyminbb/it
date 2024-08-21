@@ -1,0 +1,65 @@
+name: release
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Whether to run the workflow in dry-run mode
+        default: false
+        required: true
+        type: boolean
+jobs:
+  get_next_version:
+    if: ${{ github.triggering_actor == 'kyminbb' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      do_release: ${{ steps.get_version.outputs.old_tag != '' }}
+      version: ${{ steps.get_version.outputs.new_tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Determine next version
+        id: get_version
+        uses: anothrNick/github-tag-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: none
+          WITH_V: true
+          DRY_RUN: true
+          MAJOR_STRING_TOKEN: 'break:'
+          MINOR_STRING_TOKEN: 'feat:'
+          PATCH_STRING_TOKEN: 'fix:'
+          NONE_STRING_TOKEN: 'none:'
+  release:
+    if: ${{ needs.get_next_version.outputs.do_release }}
+    runs-on: ubuntu-latest
+    needs: get_next_version
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update version badge
+        run: |
+          version=${{ needs.get_next_version.outputs.version }}
+          sed -i -E "s/(https:\/\/img.shields.io\/badge\/latest-).*(%25-)/\1$version\2)/" README.md
+      - name: Commit and push changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          message: Release ${{ needs.get_next_version.outputs.version }}
+      - name: Bump version
+        uses: anothrNick/github-tag-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CUSTOM_TAG: ${{ needs.get_next_version.outputs.version }}
+          DRY_RUN: ${{ inputs.dry_run }}
+      - name: Release next version
+        uses: ncipollo/release-action@v1
+        with:
+          draft: ${{ inputs.dry_run }}
+          generateReleaseNotes: true
+          makeLatest: true
+          tag: ${{ needs.get_next_version.outputs.version }}
+  
