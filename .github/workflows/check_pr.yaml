@@ -1,7 +1,7 @@
 name: check-pr-title
 on:
   pull_request_target:
-    types: [opened, edited, synchronize, reopened]
+    types: [opened, edited, reopened]
     branches: [main]
 jobs:
   check:

@@ -6,7 +6,7 @@ on:
         type: boolean
         description: Dry run
         required: true
-        default: false
+        default: true
 jobs:
   get_next_version:
     if: ${{ github.ref == 'refs/heads/main' && github.triggering_actor == 'kyminbb' }}
@@ -15,6 +15,7 @@ jobs:
       contents: read
     outputs:
       do_release: ${{ steps.get_version.outputs.old_tag != '' }}
+      old_version: ${{ steps.get_version.outputs.old_tag }}
       version: ${{ steps.get_version.outputs.new_tag }}
     steps:
       - uses: actions/checkout@v4
@@ -30,7 +31,7 @@ jobs:
           MAJOR_STRING_TOKEN: 'break:'
           MINOR_STRING_TOKEN: 'feat:'
           PATCH_STRING_TOKEN: 'fix:'
-          NONE_STRING_TOKEN: "none:"
+          NONE_STRING_TOKEN: 'none:'
   release:
     if: ${{ needs.get_next_version.outputs.do_release }}
     runs-on: ubuntu-latest
@@ -55,10 +56,29 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CUSTOM_TAG: ${{ needs.get_next_version.outputs.version }}
           DRY_RUN: ${{ inputs.dry_run }}
-      - name: Release next version
-        uses: ncipollo/release-action@v1
+      - name: Build changelog
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v5
         with:
+          fromTag: ${{ needs.get_next_version.outputs.old_version }}
+          toTag: ${{ needs.get_next_version.outputs.version }}
+          failOnError: true
+          configurationJson: |
+            {
+              "ignore_labels": ["none"],
+              "label_extractor": [
+                {
+                  "pattern": "^none:.*",
+                  "target": "none",
+                  "on_property": "title",
+                  "method": "replace"
+                }
+              ]
+            }
+      - name: Release next version
+        uses: softprops/action-gh-release@v2
+        with:
+          body: ${{ steps.build_changelog.outputs.changelog }}
           draft: ${{ inputs.dry_run }}
-          generateReleaseNotes: true
-          makeLatest: true
-          tag: ${{ needs.get_next_version.outputs.version }}
+          tag_name: ${{ needs.get_next_version.outputs.version }}
+          make_latest: true
