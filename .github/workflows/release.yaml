@@ -9,7 +9,7 @@ on:
         default: false
 jobs:
   get_next_version:
-    if: ${{ github.triggering_actor == 'kyminbb' }}
+    if: ${{ github.ref == 'refs/heads/main' && github.triggering_actor == 'kyminbb' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
