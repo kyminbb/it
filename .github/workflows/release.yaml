@@ -86,6 +86,8 @@ jobs:
                 }
               ],
               "ignore_labels": ["none"],
+              "template": "#{{CHANGELOG}}\n\n**Full Changelog**: https://github.com/#{{OWNER}}/#{{REPO}}/compare/#{{FROM_TAG}}...#{{TO_TAG}}",
+              "pr_template": "- #{{TITLE}} by @#{{AUTHOR}} in #{{URL}}",
               "label_extractor": [
                 {
                   "pattern": "^break:.*",
