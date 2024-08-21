@@ -12,14 +12,8 @@ jobs:
       contents: read
       pull-requests: read
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-          sparse-checkout: |
-            .github/pr-title-config.json
-          sparse-checkout-cone-mode: false
       - uses: thehanimo/pr-title-checker@v1.4.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           pass_on_octokit_error: false
-          local_configuration_path: .github/pr-title-config.json
+          configuration_path: .github/.pr-title-config.json
