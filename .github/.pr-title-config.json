@@ -14,7 +14,7 @@
   },
   "MESSAGES": {
     "success": "Passed",
-    "failure": "Failing CI test",
+    "failure": "Invalid PR title",
     "notice": ""
   }
 }
