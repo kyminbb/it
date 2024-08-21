@@ -11,7 +11,7 @@
   },
   "MESSAGES": {
     "success": "Passed",
-    "failure": "PR title must match: \"^(break: |feat: |fix: |none: )[\\p{Ll}\\p{Z}\\p{S}\\p{N}\\p{P}]{1,70}$\"",
+    "failure": "PR title must start with a prefix \"[break|feat|fix|none]: \" and be no more than 70 characters long.",
     "notice": ""
   }
 }
