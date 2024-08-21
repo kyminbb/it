@@ -6,6 +6,8 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -13,16 +15,21 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
-      - name: Determine new version
-        id: get-version
-        uses: paulhatch/semantic-version@v5.4.0
-        with:
-          major_pattern: "break:"
-          minor_pattern: "feat:"
-      - name: Release version
-        uses: goreleaser/goreleaser-action@v6
-        with:
-          version: ~> v2
-          args: release --clean
+      - name: Bump version
+        id: bump-version
+        uses: anothrNick/github-tag-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          MAJOR_STRING_TOKEN: "break:"
+          MINOR_STRING_TOKEN: "feat:"
+          PATCH_STRING_TOKEN: "fix:"
+          NONE_STRING_TOKEN: "no-release:"
+      - name: Release next version
+        if: ${{ steps.bump-version.outputs.old_tag != '' }}
+        uses: ncipollo/release-action@v1
+        with:
+          draft: true
+          generateReleaseNotes: true
+          makeLatest: true
+          tag: ${{ steps.bump-version.outputs.new_tag }}
