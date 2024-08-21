@@ -14,7 +14,7 @@ jobs:
     permissions:
       contents: read
     outputs:
-      do_release: ${{ steps.get_version.outputs.old_tag != '' }}
+      do_release: ${{ steps.get_version.outputs.old_tag != steps.get_version.outputs.new_tag }}
       old_version: ${{ steps.get_version.outputs.old_tag }}
       version: ${{ steps.get_version.outputs.new_tag }}
     steps:
@@ -26,14 +26,16 @@ jobs:
         uses: anothrNick/github-tag-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: minor
           WITH_V: true
           DRY_RUN: true
+          VERBOSE: false
           MAJOR_STRING_TOKEN: 'break:'
           MINOR_STRING_TOKEN: 'feat:'
           PATCH_STRING_TOKEN: 'fix:'
           NONE_STRING_TOKEN: 'none:'
   release:
-    if: ${{ needs.get_next_version.outputs.do_release }}
+    if: ${{ needs.get_next_version.outputs.do_release == 'true' }}
     runs-on: ubuntu-latest
     needs: get_next_version
     permissions:
@@ -49,24 +51,57 @@ jobs:
         uses: EndBug/add-and-commit@v9
         with:
           default_author: github_actions
-          message: Release ${{ needs.get_next_version.outputs.version }}
-      - name: Bump version
-        uses: anothrNick/github-tag-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CUSTOM_TAG: ${{ needs.get_next_version.outputs.version }}
-          DRY_RUN: ${{ inputs.dry_run }}
+          message: 'none: release ${{ needs.get_next_version.outputs.version }}'
       - name: Build changelog
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@v5
         with:
           fromTag: ${{ needs.get_next_version.outputs.old_version }}
-          toTag: ${{ needs.get_next_version.outputs.version }}
+          toTag: ${{ github.ref }}
           failOnError: true
+          mode: COMMIT
           configurationJson: |
             {
+              "categories": [
+                {
+                  "title": "## ‼️ Breaking Changes",
+                  "labels": ["break"]
+                },
+                {
+                  "title": "## 🚀 Features",
+                  "labels": ["feat"]
+                },
+                {
+                  "title": "## 🐛 Fixes",
+                  "labels": ["fix"]
+                },
+                {
+                  "title": "## 📦 Others",
+                  "ignore_labels": ["break", "feat", "fix"]
+                }
+              ],
               "ignore_labels": ["none"],
+              "template": "#{{CHANGELOG}}\n\n**Full Changelog**: https://github.com/#{{OWNER}}/#{{REPO}}/compare/#{{FROM_TAG}}...${{ needs.get_next_version.outputs.version }}",
+              "pr_template": "- #{{TITLE}} by @#{{AUTHOR}}",
               "label_extractor": [
+                {
+                  "pattern": "^break:.*",
+                  "target": "break",
+                  "on_property": "title",
+                  "method": "replace"
+                },
+                {
+                  "pattern": "^feat:.*",
+                  "target": "feat",
+                  "on_property": "title",
+                  "method": "replace"
+                },
+                {
+                  "pattern": "^fix:.*",
+                  "target": "fix",
+                  "on_property": "title",
+                  "method": "replace"
+                },
                 {
                   "pattern": "^none:.*",
                   "target": "none",
@@ -81,4 +116,4 @@ jobs:
           body: ${{ steps.build_changelog.outputs.changelog }}
           draft: ${{ inputs.dry_run }}
           tag_name: ${{ needs.get_next_version.outputs.version }}
-          make_latest: true
+          make_latest: ${{ !inputs.dry_run }}
