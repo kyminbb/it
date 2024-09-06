@@ -1,6 +1,6 @@
 # it
 
-![latest](https://img.shields.io/badge/latest-v0.0.0-green)
+![latest](https://img.shields.io/badge/latest-v0.1.0-green)
 ![go](https://img.shields.io/badge/go-1.23-00ADD8?logo=go)
 ![coverage](https://img.shields.io/badge/coverage-100.0%25-44CC11)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kyminbb/it)](https://goreportcard.com/report/github.com/kyminbb/it)
