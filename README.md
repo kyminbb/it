@@ -22,9 +22,7 @@ go get github.com/kyminbb/it
 import "github.com/kyminbb/it"
 ```
 
-## Documentation
-
-See the [API Reference](https://pkg.go.dev/github.com/kyminbb/it).
+See <https://pkg.go.dev/github.com/kyminbb/it> for the detailed usage doc and examples.
 
 ## Contributing
 
