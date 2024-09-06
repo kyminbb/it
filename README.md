@@ -7,7 +7,7 @@
 
 **:boom: `it` is a Go module that provides a number of iterator building blocks, based on the Go 1.23+ iterators.**
 
-It is inspired by the Rust [std::iter](https://doc.rust-lang.org/std/iter/index.html) module.
+It is inspired by the Rust [std::iter::Iterator](https://doc.rust-lang.org/std/iter/trait.Iterator.html) trait.
 
 ## Getting Started
 
