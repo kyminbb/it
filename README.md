@@ -4,15 +4,27 @@
 ![go](https://img.shields.io/badge/go-1.23-00ADD8?logo=go)
 ![coverage](https://img.shields.io/badge/coverage-100.0%25-44CC11)
 
-**:boom: `it` is a Go module for utility iterators, based on the Go 1.23+ iterators.**
+**:boom: `it` is a Go module that provides a number of iterator building blocks, based on the Go 1.23+ iterators.**
 
 It is inspired by the Rust [std::iter](https://doc.rust-lang.org/std/iter/index.html) module.
 
-## Install
+## Getting Started
+
+### Installation
 
 ```bash
 go get github.com/kyminbb/it
 ```
+
+### Usage
+
+```go
+import "github.com/kyminbb/it"
+```
+
+## Documentation
+
+See the [API Reference](https://pkg.go.dev/github.com/kyminbb/it).
 
 ## Contributing
 
@@ -26,3 +38,7 @@ go get github.com/kyminbb/it
 - Fix [open issues](https://github.com/kyminbb/it/issues) or request new features
 - Fork this repository to make changes
   - Run `just test` to run the tests
+
+## License
+
+See [LICENSE](LICENSE) (MIT).
