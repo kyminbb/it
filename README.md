@@ -5,7 +5,9 @@
 ![coverage](https://img.shields.io/badge/coverage-100.0%25-44CC11)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kyminbb/it)](https://goreportcard.com/report/github.com/kyminbb/it)
 
-**:boom: `it` is a Go module that provides a number of iterator building blocks, based on the Go 1.23+ iterators.**
+**:boom: `it` is a Go module that provides a variety of iterator building blocks, based on the Go 1.23+ iterators.**
+
+It is entirely written in the Go standard library, making it lightweight and dependency-free.
 
 It is inspired by the Rust [std::iter::Iterator](https://doc.rust-lang.org/std/iter/trait.Iterator.html) trait.
 
