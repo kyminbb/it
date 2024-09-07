@@ -33,3 +33,16 @@ func Zip[K, V any](seqK iter.Seq[K], seqV iter.Seq[V]) iter.Seq2[K, V] {
 		}
 	}
 }
+
+// Unzip consumes all elements of seq and returns two iterators: one over the left elements and
+// one over the right elements.
+func Unzip[K, V any](seq iter.Seq2[K, V]) (iter.Seq[K], iter.Seq[V]) {
+	var ks []K
+	var vs []V
+	seq(func(k K, v V) bool {
+		ks = append(ks, k)
+		vs = append(vs, v)
+		return true
+	})
+	return All(ks), All(vs)
+}
