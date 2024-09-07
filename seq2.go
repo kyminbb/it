@@ -45,10 +45,9 @@ func Zip[K, V any](seqK iter.Seq[K], seqV iter.Seq[V]) iter.Seq2[K, V] {
 func Unzip[K, V any](seq iter.Seq2[K, V]) (iter.Seq[K], iter.Seq[V]) {
 	var ks []K
 	var vs []V
-	seq(func(k K, v V) bool {
+	for k, v := range seq {
 		ks = append(ks, k)
 		vs = append(vs, v)
-		return true
-	})
+	}
 	return All(ks), All(vs)
 }
