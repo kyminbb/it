@@ -6,17 +6,24 @@ import (
 	"testing"
 
 	"github.com/kyminbb/it"
+	"github.com/stretchr/testify/assert"
 )
 
-func ExampleAll2() {
-	pairs := it.All2(map[int]string{1: "one", 2: "two", 3: "three"})
-	for k, v := range pairs {
-		fmt.Println(k, v)
+func TestEmpty2(t *testing.T) {
+	got := it.Empty2[int, string]()
+	ok := false
+	for range got {
+		ok = true
+	}
+	assert.False(t, ok)
+}
+
+func ExampleEmpty2() {
+	empty := it.Empty2[int, string]()
+	for range empty {
+		fmt.Println("This should not be printed")
 	}
 	// Output:
-	// 1 one
-	// 2 two
-	// 3 three
 }
 
 func TestZip(t *testing.T) {
@@ -61,14 +68,12 @@ func ExampleZip() {
 	for k, v := range pairs {
 		fmt.Println(k, v)
 	}
-	fmt.Println()
 
 	shortNums := it.All([]int{1, 2})
 	pairs = it.Zip(shortNums, words)
 	for k, v := range pairs {
 		fmt.Println(k, v)
 	}
-	fmt.Println()
 
 	shortWords := it.All([]string{"one", "two"})
 	pairs = it.Zip(nums, shortWords)
@@ -79,10 +84,8 @@ func ExampleZip() {
 	// 1 one
 	// 2 two
 	// 3 three
-	//
 	// 1 one
 	// 2 two
-	//
 	// 1 one
 	// 2 two
 }
@@ -118,12 +121,14 @@ func TestUnzip(t *testing.T) {
 }
 
 func ExampleUnzip() {
-	pairs := it.All2(map[int]string{1: "one", 2: "two", 3: "three"})
-	nums, words := it.Unzip(pairs)
-	for k := range nums {
+	nums := it.All([]int{1, 2, 3})
+	words := it.All([]string{"one", "two", "three"})
+	pairs := it.Zip(nums, words)
+	unzippedNums, unzippedWords := it.Unzip(pairs)
+	for k := range unzippedNums {
 		fmt.Println(k)
 	}
-	for v := range words {
+	for v := range unzippedWords {
 		fmt.Println(v)
 	}
 	// Output:
