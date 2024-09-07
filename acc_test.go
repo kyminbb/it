@@ -110,6 +110,46 @@ func ExampleMin() {
 	// 0 false
 }
 
+func TestMinByKey(t *testing.T) {
+	testCases := []struct {
+		name string
+		seq  iter.Seq[int]
+		want int
+		ok   bool
+	}{
+		{name: "NonEmpty", seq: it.All([]int{1, 2, 3}), want: 3, ok: true},
+		{name: "Empty", seq: it.Empty[int]()},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			got, ok := it.MinByKey(tc.seq, func(a, b int) int { return cmp.Compare(b, a) })
+			assert.Equal(t, tc.want, got)
+			assert.Equal(t, tc.ok, ok)
+		})
+	}
+}
+
+func ExampleMinByKey() {
+	type Student struct {
+		name string
+		age  int
+	}
+	compareStudents := func(a, b *Student) int {
+		if c := cmp.Compare(a.age, b.age); c != 0 {
+			return c
+		}
+		return cmp.Compare(a.name, b.name)
+	}
+	students := it.All([]*Student{{"Alice", 21}, {"Bob", 20}, {"Charlie", 20}})
+	fmt.Println(it.MinByKey(students, compareStudents))
+
+	students = it.Empty[*Student]()
+	fmt.Println(it.MinByKey(students, compareStudents))
+	// Output:
+	// &{Bob 20} true
+	// <nil> false
+}
+
 func TestFold(t *testing.T) {
 	testCases := []struct {
 		name string
