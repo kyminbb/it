@@ -2,6 +2,7 @@ package it_test
 
 import (
 	"iter"
+	"maps"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -23,4 +24,10 @@ func assertEqualSeq[V any](t *testing.T, expected, actual iter.Seq[V]) {
 			return
 		}
 	}
+}
+
+// assertEqualSeq2 asserts that two sequences are equal.
+func assertEqualSeq2[K comparable, V any](t *testing.T, expected, actual iter.Seq2[K, V]) {
+	t.Helper()
+	assert.Equal(t, maps.Collect(expected), maps.Collect(actual))
 }
