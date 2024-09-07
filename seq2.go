@@ -15,6 +15,12 @@ func All2[Map ~map[K]V, K comparable, V any](m Map) iter.Seq2[K, V] {
 	}
 }
 
+// Empty2 returns an iterator that yields nothing.
+func Empty2[K, V any]() iter.Seq2[K, V] {
+	return func(yield func(K, V) bool) {
+	}
+}
+
 // Zip returns an iterator over pairs of elements from seqK and seqV.
 //
 // The returned iterator stops when either seqK or seqV stops.

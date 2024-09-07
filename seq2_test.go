@@ -86,3 +86,51 @@ func ExampleZip() {
 	// 1 one
 	// 2 two
 }
+
+func TestUnzip(t *testing.T) {
+	type testCase struct {
+		name  string
+		seq   iter.Seq2[int, string]
+		wantK iter.Seq[int]
+		wantV iter.Seq[string]
+	}
+	testCases := []testCase{
+		{
+			name:  "NonEmpty",
+			seq:   it.All2(map[int]string{1: "one", 2: "two", 3: "three"}),
+			wantK: it.All([]int{1, 2, 3}),
+			wantV: it.All([]string{"one", "two", "three"}),
+		},
+		{
+			name:  "Empty",
+			seq:   it.Empty2[int, string](),
+			wantK: it.Empty[int](),
+			wantV: it.Empty[string](),
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			gotK, gotV := it.Unzip(tc.seq)
+			assertEqualSeq(t, tc.wantK, gotK)
+			assertEqualSeq(t, tc.wantV, gotV)
+		})
+	}
+}
+
+func ExampleUnzip() {
+	pairs := it.All2(map[int]string{1: "one", 2: "two", 3: "three"})
+	nums, words := it.Unzip(pairs)
+	for k := range nums {
+		fmt.Println(k)
+	}
+	for v := range words {
+		fmt.Println(v)
+	}
+	// Output:
+	// 1
+	// 2
+	// 3
+	// one
+	// two
+	// three
+}
