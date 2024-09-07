@@ -40,7 +40,7 @@ func ExampleMax() {
 	// 0 false
 }
 
-func TestMaxByKey(t *testing.T) {
+func TestMaxBy(t *testing.T) {
 	testCases := []struct {
 		name string
 		seq  iter.Seq[int]
@@ -52,14 +52,14 @@ func TestMaxByKey(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			got, ok := it.MaxByKey(tc.seq, func(a, b int) int { return cmp.Compare(b, a) })
+			got, ok := it.MaxBy(tc.seq, func(a, b int) int { return cmp.Compare(b, a) })
 			assert.Equal(t, tc.want, got)
 			assert.Equal(t, tc.ok, ok)
 		})
 	}
 }
 
-func ExampleMaxByKey() {
+func ExampleMaxBy() {
 	type Student struct {
 		name string
 		age  int
@@ -71,10 +71,10 @@ func ExampleMaxByKey() {
 		return cmp.Compare(a.name, b.name)
 	}
 	students := it.All([]*Student{{"Alice", 21}, {"Bob", 21}, {"Charlie", 20}})
-	fmt.Println(it.MaxByKey(students, compareStudents))
+	fmt.Println(it.MaxBy(students, compareStudents))
 
 	students = it.Empty[*Student]()
-	fmt.Println(it.MaxByKey(students, compareStudents))
+	fmt.Println(it.MaxBy(students, compareStudents))
 	// Output:
 	// &{Bob 21} true
 	// <nil> false
@@ -110,7 +110,7 @@ func ExampleMin() {
 	// 0 false
 }
 
-func TestMinByKey(t *testing.T) {
+func TestMinBy(t *testing.T) {
 	testCases := []struct {
 		name string
 		seq  iter.Seq[int]
@@ -122,14 +122,14 @@ func TestMinByKey(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			got, ok := it.MinByKey(tc.seq, func(a, b int) int { return cmp.Compare(b, a) })
+			got, ok := it.MinBy(tc.seq, func(a, b int) int { return cmp.Compare(b, a) })
 			assert.Equal(t, tc.want, got)
 			assert.Equal(t, tc.ok, ok)
 		})
 	}
 }
 
-func ExampleMinByKey() {
+func ExampleMinBy() {
 	type Student struct {
 		name string
 		age  int
@@ -141,10 +141,10 @@ func ExampleMinByKey() {
 		return cmp.Compare(a.name, b.name)
 	}
 	students := it.All([]*Student{{"Alice", 21}, {"Bob", 20}, {"Charlie", 20}})
-	fmt.Println(it.MinByKey(students, compareStudents))
+	fmt.Println(it.MinBy(students, compareStudents))
 
 	students = it.Empty[*Student]()
-	fmt.Println(it.MinByKey(students, compareStudents))
+	fmt.Println(it.MinBy(students, compareStudents))
 	// Output:
 	// &{Bob 20} true
 	// <nil> false
