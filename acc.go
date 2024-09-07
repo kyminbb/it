@@ -18,18 +18,14 @@ func Max[V cmp.Ordered](seq iter.Seq[V]) (V, bool) {
 	return acc, ok
 }
 
-// Ordering is a type for comparing values.
-type Ordering int
-
-const (
-	Less    Ordering = -1
-	Equal   Ordering = 0
-	Greater Ordering = 1
-)
-
 // MaxByKey returns the maximum element of seq according to the comparison function.
 // The second return value reports whether the element exists (seq is not empty).
-func MaxByKey[V any](seq iter.Seq[V], compare func(V, V) Ordering) (V, bool) {
+//
+// compare should return:
+//   - a positive value if x is greater than y,
+//   - 0 if x is equal to y,
+//   - a negative value if x is less than y.
+func MaxByKey[V any](seq iter.Seq[V], compare func(V, V) int) (V, bool) {
 	var acc V
 	ok := false
 	for v := range seq {
