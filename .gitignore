@@ -20,3 +20,14 @@ go.work.sum
 
 # env file
 .env
+
+# OS generated files
+*.DS_Store
+
+# Visual Studio Code
+**/.vscode/
+
+# Jetbrains
+**/.fleet/
+**/.idea/
+*.iml
