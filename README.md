@@ -1,3 +1,5 @@
+<img src='./img/thumbnail.webp' width='200px' />
+
 # it
 
 ![latest](https://img.shields.io/badge/latest-v0.1.0-green)
